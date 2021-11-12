@@ -44,7 +44,7 @@ def follow_accounts(
 
         for account in category_accounts:
             web_api_func(account["instagram_id"])
-            time.sleep(0.01)
+            time.sleep(60)
 
 
 def import_accounts() -> Dict[str, List[Dict[str, Any]]]:
