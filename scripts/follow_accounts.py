@@ -52,6 +52,20 @@ def import_accounts() -> Dict[str, List[Dict[str, Any]]]:
     with open(FILEPATH, "r", encoding="utf-8-sig") as f:
         accounts = [row for row in csv.DictReader(f, skipinitialspace=True)]
 
+    ### temp
+    FILEPATH = "downloads/followed_accounts.csv"
+    with open(FILEPATH, "r", encoding="utf-8-sig") as f:
+        accounts_with_ids = [row for row in csv.DictReader(f, skipinitialspace=True)]
+
+    for account in accounts:
+        matching_account = next(
+            (a for a in accounts_with_ids if a["username"] == account["username"]), {}
+        )
+        account["instagram_id"] = matching_account.get("instagram_id")
+
+    account = [a for a in accounts if a["instagram_id"]]
+    ### end temp
+
     categories = {account["category"] for account in accounts}
     categorized_accounts = {category: [] for category in categories}
 
