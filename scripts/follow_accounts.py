@@ -1,10 +1,10 @@
 import time
 import csv
 import logging
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Set
 
 from config import config
-from instagram import MyClient
+from instagram import MyClient, paginate_all
 
 
 def check_sign(category: str) -> bool:
@@ -15,6 +15,17 @@ def check_sign(category: str) -> bool:
         return False
     else:
         raise Exception(f"categories to follow must begin with '+' or '-'")
+
+
+def is_action_needed(
+    follow: bool, account_id: int, followed_accounts: Set[int]
+) -> bool:
+    if follow & account_id in follow_accounts:
+        return False
+    elif not follow and account_id not in follow_accounts
+        return False
+    else:
+        return True
 
 
 def follow_accounts(
@@ -30,21 +41,33 @@ def follow_accounts(
         password=password,
     )
 
+    followed_accounts = [
+        format_account(account)
+        for account in paginate_all(
+            authed_web_api.user_following, authed_web_api, "edge_follow"
+        )
+    ]
+    followed_account_ids = {a["id"] for a in followed_accounts}
+
     for category in follow_categories:
         follow = check_sign(category)
         category = category[1:]
         category_accounts = accounts[category]
         prefix = "" if follow else "un"
         logging.info(f"{prefix}following {category} accounts from {username}")
+
         web_api_func = (
             authed_web_api.friendships_create
             if follow
             else authed_web_api.friendships_destroy
         )
-
         for account in category_accounts:
-            web_api_func(account["instagram_id"])
-            time.sleep(60)
+            action_needed = is_action_needed(
+                follow, account["instagram_id"], followed_account_ids
+            )
+            if action_needed:
+                web_api_func(account["instagram_id"])
+                time.sleep(60)
 
 
 def import_accounts() -> Dict[str, List[Dict[str, Any]]]:
