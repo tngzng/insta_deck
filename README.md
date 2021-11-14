@@ -55,3 +55,4 @@ python scripts/export_accounts.py
 python scripts/follow_accounts.py
 ```
 8. log into your new accounts to start using your insta deck 😎
+![screenshot](docs/insta-deck-wide.png)
