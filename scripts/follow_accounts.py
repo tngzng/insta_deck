@@ -4,7 +4,7 @@ import logging
 from typing import Dict, Any, List, Set
 
 from config import config
-from instagram import MyClient, paginate_all
+from instagram import MyClient, paginate_all, format_account
 
 
 def check_sign(category: str) -> bool:
@@ -20,9 +20,11 @@ def check_sign(category: str) -> bool:
 def is_action_needed(
     follow: bool, account_id: int, followed_accounts: Set[int]
 ) -> bool:
-    if follow & account_id in follow_accounts:
+    if not account_id:
         return False
-    elif not follow and account_id not in follow_accounts:
+    elif follow & (account_id in followed_accounts):
+        return False
+    elif not follow & (account_id not in followed_accounts):
         return False
     else:
         return True
@@ -47,7 +49,7 @@ def follow_accounts(
             authed_web_api.user_following, authed_web_api, "edge_follow"
         )
     ]
-    followed_account_ids = {a["id"] for a in followed_accounts}
+    followed_account_ids = {a["instagram_id"] for a in followed_accounts}
 
     for category in follow_categories:
         follow = check_sign(category)
@@ -66,8 +68,13 @@ def follow_accounts(
                 follow, account["instagram_id"], followed_account_ids
             )
             if action_needed:
+                logging.info(f"{prefix}following {account['username']}...")
                 web_api_func(account["instagram_id"])
                 time.sleep(60)
+            else:
+                logging.info(
+                    f"already {prefix}follow {account['username']}, skipping..."
+                )
 
 
 def import_accounts() -> Dict[str, List[Dict[str, Any]]]:
