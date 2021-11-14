@@ -1,10 +1,10 @@
 import time
 import csv
 import logging
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Set
 
 from config import config
-from instagram import MyClient
+from instagram import MyClient, paginate_all, format_account
 
 
 def check_sign(category: str) -> bool:
@@ -15,6 +15,19 @@ def check_sign(category: str) -> bool:
         return False
     else:
         raise Exception(f"categories to follow must begin with '+' or '-'")
+
+
+def is_action_needed(
+    follow: bool, account_id: int, followed_accounts: Set[int]
+) -> bool:
+    if not account_id:
+        return False
+    elif follow & (account_id in followed_accounts):
+        return False
+    elif not follow & (account_id not in followed_accounts):
+        return False
+    else:
+        return True
 
 
 def follow_accounts(
@@ -30,27 +43,58 @@ def follow_accounts(
         password=password,
     )
 
+    followed_accounts = [
+        format_account(account)
+        for account in paginate_all(
+            authed_web_api.user_following, authed_web_api, "edge_follow"
+        )
+    ]
+    followed_account_ids = {a["instagram_id"] for a in followed_accounts}
+
     for category in follow_categories:
         follow = check_sign(category)
         category = category[1:]
         category_accounts = accounts[category]
         prefix = "" if follow else "un"
         logging.info(f"{prefix}following {category} accounts from {username}")
+
         web_api_func = (
             authed_web_api.friendships_create
             if follow
             else authed_web_api.friendships_destroy
         )
-
         for account in category_accounts:
-            web_api_func(account["instagram_id"])
-            time.sleep(60)
+            action_needed = is_action_needed(
+                follow, account["instagram_id"], followed_account_ids
+            )
+            if action_needed:
+                logging.info(f"{prefix}following {account['username']}...")
+                web_api_func(account["instagram_id"])
+                time.sleep(60)
+            else:
+                logging.info(
+                    f"already {prefix}follow {account['username']}, skipping..."
+                )
 
 
 def import_accounts() -> Dict[str, List[Dict[str, Any]]]:
     FILEPATH = "uploads/categorized_accounts.csv"
     with open(FILEPATH, "r", encoding="utf-8-sig") as f:
         accounts = [row for row in csv.DictReader(f, skipinitialspace=True)]
+
+    ### temp
+    FILEPATH = "downloads/followed_accounts.csv"
+    with open(FILEPATH, "r", encoding="utf-8-sig") as f:
+        accounts_with_ids = [row for row in csv.DictReader(f, skipinitialspace=True)]
+
+    for account in accounts:
+        matching_account = next(
+            (a for a in accounts_with_ids if a["username"] == account["username"]), {}
+        )
+        account["instagram_id"] = matching_account.get("instagram_id")
+
+    account = [a for a in accounts if a["instagram_id"]]
+    ### end temp
 
     categories = {account["category"] for account in accounts}
     categorized_accounts = {category: [] for category in categories}

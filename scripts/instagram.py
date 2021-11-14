@@ -63,6 +63,15 @@ class MyClient(Client):
         return login_res
 
 
+def format_account(account: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "instagram_id": account["id"],
+        "username": account["username"],
+        "full_name": account["full_name"],
+        "account_url": f"https://www.instagram.com/{account['username']}",
+    }
+
+
 def paginate_all(
     web_api_func: callable, authed_web_api: MyClient, response_key: str
 ) -> Iterator[Dict[str, Any]]:
