@@ -25,7 +25,7 @@ pip3 install --upgrade pip && pip3 install -r requirements.txt
 python scripts/export_accounts.py
 ```
 4. upload the csv of followed accounts to notion and add a category label to each
-5. export the categorized account info from notion as a csv and move it to the `uploads` folder in a file named `categorized_accounts.csv`
+5. export the categorized account info from notion as in the ["Markdown & CSV"](https://www.notion.so/help/export-your-content) format and move it to the `uploads` folder in a file named `categorized_accounts.csv`
 6. add info for additional instagram accounts to the `env.json` file in the following format. `FOLLOW_CATEGORIES` should use the notion categories you applied in step 4, specifying "+" to start following accounts in a category or "-" to unfollow accounts in a category
 ```
 {
