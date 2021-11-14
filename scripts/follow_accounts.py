@@ -22,7 +22,7 @@ def is_action_needed(
 ) -> bool:
     if follow & account_id in follow_accounts:
         return False
-    elif not follow and account_id not in follow_accounts
+    elif not follow and account_id not in follow_accounts:
         return False
     else:
         return True
