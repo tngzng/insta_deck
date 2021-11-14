@@ -50,7 +50,7 @@ python scripts/export_accounts.py
     ]
 }
 ```
-7. follow (and unfollow) accounts in the categories you specified above
+7. follow (and unfollow) accounts in the categories you specified above (this may take some time)
 ```
 python scripts/follow_accounts.py
 ```
