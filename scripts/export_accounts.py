@@ -3,16 +3,7 @@ import logging
 from typing import Dict, Any
 
 from config import config
-from instagram import MyClient, paginate_all
-
-
-def format_account(account: Dict[str, Any]) -> Dict[str, Any]:
-    return {
-        "instagram_id": account["id"],
-        "username": account["username"],
-        "full_name": account["full_name"],
-        "account_url": f"https://www.instagram.com/{account['username']}",
-    }
+from instagram import MyClient, paginate_all, format_account
 
 
 def export_followed_accounts(username: str, password: str) -> None:
