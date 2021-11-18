@@ -1,5 +1,5 @@
 # insta_deck
-like tweet deck, but for instagram
+like [tweet deck](https://tweetdeck.twitter.com/), but for instagram
 
 ## usage
 1. install the dependencies
