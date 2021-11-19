@@ -1,6 +1,11 @@
 # insta_deck
 like [tweet deck](https://tweetdeck.twitter.com/), but for instagram
 
+## prerequisites 
+to make your own insta deck, you'll need:
+1. basic familiarity running scripts in terminal 
+2. a free notion account 
+
 ## usage
 1. install the dependencies
 ```
