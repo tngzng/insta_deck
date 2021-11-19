@@ -1,6 +1,11 @@
 # insta_deck
 like [tweet deck](https://tweetdeck.twitter.com/), but for instagram
 
+## about 
+i began dreading my instagram feed. it became an overwhelming stream of content that juxtaposed cute animals, influencer thirst traps, engagement announcements from acquaintances i could barely remember, and a highlighted selection of the worst news of the day. i was also terrified of posting. with so many glossy celelbrities in their feeds, why would my followers care about a mundane update from my mundane life? the app became unusable for me, even as i understood it's power to maintain social connection, and to provide a lens through which i could refract myself into the world.
+
+i realized i was missing context — the ability to pick and choose what kind of content i wanted to engage with and when. i wanted an experience like [tweet deck](https://tweetdeck.twitter.com/) for instagram. i wanted to be able to categorize the accounts i followed (art, lifestyle, activism, entertainment) and to engage with each feed on my own terms. so i made this — a collection of python scripts and a notion template that i used to turn my monolithic feed into seven distinct accounts i can easily switch between on instagram's mobile app. 
+
 ## prerequisites 
 to make your own insta deck, you'll need:
 1. basic familiarity running scripts in terminal 
