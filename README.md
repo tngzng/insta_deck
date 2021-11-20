@@ -46,7 +46,9 @@ python scripts/export_accounts.py
             "INSTAGRAM_USER": "your-username",
             "INSTAGRAM_PASSWORD": "your-password",
             "FOLLOW_CATEGORIES": [
-                "-unfollow"
+                "-activists",
+                "-animals",
+                "-memes"
             ]
             "MAIN_ACCOUNT": true
         },
@@ -54,7 +56,8 @@ python scripts/export_accounts.py
             "INSTAGRAM_USER": "your-username",
             "INSTAGRAM_PASSWORD": "your-password",
             "FOLLOW_CATEGORIES": [
-                "+close friends"
+                "+animals",
+                "+memes"
             ]
         }
     ]
